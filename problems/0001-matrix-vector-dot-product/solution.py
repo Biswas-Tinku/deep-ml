@@ -1,13 +1,16 @@
-import numpy as np
-def matrix_dot_vector(a: list[list[int|float]], b: list[int|float]) -> list[int|float]:
-	# Return a list where each element is the dot product of a row of 'a' with 'b'.
-	# If the number of columns in 'a' does not match the length of 'b', return -1.
-	a_np = np.array(a)
-	b_np = np.array(b)
-	m = a_np.shape[1] # a is a metrix of nXm dimention
-	l = len(b_np) 
-	if m == l:
-		output = np.dot(a_np, b_np).tolist()
-	else:
-		output = -1
-	return output
+import torch
+
+def matrix_dot_vector(a, b) -> torch.Tensor:
+    """
+    Compute the product of matrix `a` and vector `b` using PyTorch.
+    Inputs can be Python lists, NumPy arrays, or torch Tensors.
+    Returns a 1-D tensor of length m, or tensor(-1) if dimensions mismatch.
+    """
+    a_t = torch.as_tensor(a, dtype=torch.float)
+    b_t = torch.as_tensor(b, dtype=torch.float)
+    # Dimension mismatch check
+    if a_t.size(1) != b_t.size(0):
+        return torch.tensor(-1)
+    else:
+        output = torch.mv(a_t,b_t)
+    return output
